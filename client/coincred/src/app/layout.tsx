@@ -26,9 +26,15 @@ export default function RootLayout({
   const initialState = cookieToInitialState(config, headers().get('cookie'))
   return (
     <html lang="en">
-      <body className={inter.className}><Web3ModalProvider initialState={initialState}>
-        <Narvbar/>
-        {children}</Web3ModalProvider></body>
+      <body className={`${inter.className} h-screen overflow-hidden`}><Web3ModalProvider initialState={initialState}>
+     
+          <Narvbar />
+          
+            {children}
+          
+      
+
+        </Web3ModalProvider></body>
     </html>
   );
 }

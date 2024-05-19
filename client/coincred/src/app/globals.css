@@ -71,7 +71,7 @@
       @apply border-border;
     }
     body {
-      @apply bg-backGroundColor text-foreground;
+      @apply bg-backGroundColor text-foreground ;
     }
   }
 

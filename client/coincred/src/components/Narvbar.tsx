@@ -8,7 +8,7 @@ import { GiTakeMyMoney } from "react-icons/gi";
 
 const Narvbar =()=>{
     return(
-        <main className="h-40 w-full flex flex-col bg-backGroundColor fixed  gap-8 ">
+        <main className="h-40 w-full flex flex-col bg-backGroundColor   gap-8  ">
             <div className="w-full flex justify-between items-center" >
                 <h1 className="text-textColor">COINCREDD</h1>
                 <div className=" rounded-xl border-2 border-textColor">
