@@ -1,6 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next'
+import { headers } from 'next/headers'
+import Narvbar from '@/components/Narvbar'
+
+import { cookieToInitialState } from 'wagmi'
+
+import { config } from './config'
+import Web3ModalProvider from '@/context'
 import { Inter } from "next/font/google";
 import "./globals.css";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,9 +22,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialState = cookieToInitialState(config, headers().get('cookie'))
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}><Web3ModalProvider initialState={initialState}>
+        <Narvbar/>
+        {children}</Web3ModalProvider></body>
     </html>
   );
 }
