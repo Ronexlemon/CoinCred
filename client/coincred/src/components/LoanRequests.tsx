@@ -8,8 +8,18 @@ import {
     CardHeader,
     CardTitle,
 } from "../components/ui/card";
+import { Input } from "./ui/input";
 import { LoanRequestss } from "@/helpers/data"; 
 import { Button } from "./ui/button";
+import { Label } from "./ui/label";
+import { Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue, } from "./ui/select";
+    
 
 const LoanRequests = () => {
     return (
@@ -70,6 +80,80 @@ const LoanRequests = () => {
                     ))}
       </div>
     </ScrollArea>
+            </div>
+            <div className="w-full h-full">
+                <div  className="flex flex-col justify-between items-center gap-16 mx-5 rounded-xl h-96 bg-cardBackgroud">
+                    <div className="flex flex-col h-full justify-evenly items-center">
+                    <Label className="text-textColor" htmlFor="collateral">COLLATERAL TOKEN</Label>
+                    <div className="flex justify-between items-center">
+                    <Input  className=" bg-cardBackgroud"  type="number" placeholder="1 ETH" />
+                    <Select>
+<SelectTrigger className=" w-10  rounded-3xl">
+
+</SelectTrigger>
+<SelectContent>
+<SelectGroup>
+<SelectLabel>Collaterals</SelectLabel>
+<SelectItem value="apple">ETH</SelectItem>
+<SelectItem value="banana">MATIC</SelectItem>
+<SelectItem value="blueberry">CELO</SelectItem>
+<SelectItem value="grapes">LINK</SelectItem>
+<SelectItem value="pineapple">BNB</SelectItem>
+</SelectGroup>
+</SelectContent>
+</Select>
+
+                    </div>
+                    <div className="flex flex-col justify-center items-center gap-2">
+                    <Label className="text-textColor" htmlFor="collateral">TOKEN BORROW</Label>
+                    <div className="flex justify-between items-center">
+                    <Input className=" bg-cardBackgroud" type="number" placeholder="1 USDC" />
+                    <Select>
+                    <SelectTrigger className=" w-10 rounded-3xl">
+
+</SelectTrigger>
+<SelectContent>
+<SelectGroup>
+<SelectLabel>Tokens</SelectLabel>
+<SelectItem value="apple">USDC</SelectItem>
+<SelectItem value="banana">USDT</SelectItem>
+<SelectItem value="blueberry">CUSDC</SelectItem>
+<SelectItem value="grapes">DAI</SelectItem>
+<SelectItem value="pineapple">UST</SelectItem>
+</SelectGroup>
+</SelectContent>
+</Select>
+
+                    </div>
+
+
+
+
+                    </div>
+                    <div className="flex flex-col justify-center items-center gap-2">
+                    <Label className="text-textColor" htmlFor="collateral">TOKEN PROFIT</Label>
+                    <div className="flex justify-between items-center">
+                    <Input className=" bg-cardBackgroud" type="number" placeholder="1 USDC" />
+                    
+                    </div>
+
+
+
+
+                    </div>
+
+                    <div className="w-full ">
+                        <Button variant="accent" className="w-full">REQUEST</Button>
+                    </div>
+
+
+
+
+                    </div>
+                   
+
+                </div>
+
             </div>
         </div>
     );
