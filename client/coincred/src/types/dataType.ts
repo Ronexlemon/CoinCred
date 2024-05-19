@@ -3,5 +3,7 @@ export interface LoanRequest {
     TokenAmount: number;
     TokenProfit: number;
     BorrowerAddress: string;
-    duration:number;
+   
+    startTime:number;
+    endTime:number;
 }

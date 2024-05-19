@@ -8,6 +8,7 @@ import {
     CardHeader,
     CardTitle,
 } from "../components/ui/card";
+import { countdown } from "@/hooks/timeConversion";
 import { Input } from "./ui/input";
 import { LoanRequestss } from "@/helpers/data"; 
 import { Button } from "./ui/button";
@@ -41,13 +42,13 @@ const LoanLiquidate = () => {
                             <CardHeader>
                                 
                                
-                                <div className="flex flex-col">
+                                <div className="flex flex-col gap-2">
                                 <CardTitle>Token to pay</CardTitle>
                                 
                                 <h4>{item.TokenAmount + item.TokenProfit}USDC</h4>
 
                                 </div>
-                                <div className="flex flex-col">
+                                <div className="flex flex-col gap-2">
                                 <CardTitle>Token to Acquire</CardTitle>
                                 
                                 <h4>{item.CollateralAmount}LISK</h4>
@@ -55,10 +56,10 @@ const LoanLiquidate = () => {
                                 </div>
                             </CardHeader>
 
-                            <div className="flex flex-col">
+                            <div className="flex flex-col gap-2">
                                 <CardTitle>PERIOD ENDS IN</CardTitle>
                                 
-                                <h4>{item.duration}</h4>
+                                <h4>{countdown(item.startTime,item.endTime)}</h4>
 
                                 </div>
                            

@@ -6,9 +6,10 @@ export function convertSecondsToDaysHours(seconds: number): { days: number, hour
 }
 
 // Function to count down from duration to the current time
-export function countdown(duration: number): string {
+export function countdown(startTime: number, endTime: number): string {
     const now = Math.floor(Date.now() / 1000); // current time in seconds
-    const remainingTime = duration - now;
+  
+    const remainingTime = endTime - startTime;
 
     if (remainingTime <= 0) {
         return "Time is up!";
