@@ -19,14 +19,70 @@ import { Select,
     SelectLabel,
     SelectTrigger,
     SelectValue, } from "./ui/select";
+import { Popover,
+    PopoverContent,
+    PopoverTrigger, } from "./ui/popover";
     
 
 const LoanRequests = () => {
     return (
         <div className="w-full max-h-screen grid grid-cols-4">
+          
             <div className="col-span-3">
                
                 <ScrollArea className="h-3/4 w-full ">
+                {/* <div className="flex w-full h-1/2 justify-center items-center">
+        <h1 className="text-red-800">Yolow</h1>
+      <Popover>
+      <PopoverTrigger asChild  >
+        <Button className="text-red-800" variant="outline">Open popover</Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <div className="grid gap-4">
+          <div className="space-y-2">
+            <h4 className="font-medium leading-none">Dimensions</h4>
+            <p className="text-sm text-muted-foreground">
+              Set the dimensions for the layer.
+            </p>
+          </div>
+          <div className="grid gap-2">
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="width">Width</Label>
+              <Input
+                id="width"
+                defaultValue="100%"
+                className="col-span-2 h-8"
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="maxWidth">Max. width</Label>
+              <Input
+                id="maxWidth"
+                defaultValue="300px"
+                className="col-span-2 h-8"
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="height">Height</Label>
+              <Input
+                id="height"
+                defaultValue="25px"
+                className="col-span-2 h-8"
+              />
+            </div>
+            <div className="grid grid-cols-3 items-center gap-4">
+              <Label htmlFor="maxHeight">Max. height</Label>
+              <Input
+                id="maxHeight"
+                defaultValue="none"
+                className="col-span-2 h-8"
+              />
+            </div>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+      </div> */}
       <div className="p-4 gap-4">
        
         {LoanRequestss.map((item, index) => (
@@ -79,16 +135,19 @@ const LoanRequests = () => {
                         </Card>
                     ))}
       </div>
+      
     </ScrollArea>
+    
             </div>
+            
             <div className="w-full h-full">
                 <div  className="flex flex-col justify-between items-center gap-16 mx-5 rounded-xl h-96 bg-cardBackgroud">
                     <div className="flex flex-col h-full justify-evenly items-center">
                     <Label className="text-textColor" htmlFor="collateral">COLLATERAL TOKEN</Label>
                     <div className="flex justify-between items-center">
-                    <Input  className=" bg-cardBackgroud"  type="number" placeholder="1 ETH" />
-                    <Select>
-<SelectTrigger className=" w-10  rounded-3xl">
+                    <Input  className=" bg-cardBackgroud m-4"  type="number" placeholder="1 ETH" />
+                    <Select >
+<SelectTrigger className=" w-10  rounded-3xl mr-2 ">
 
 </SelectTrigger>
 <SelectContent>
@@ -107,9 +166,9 @@ const LoanRequests = () => {
                     <div className="flex flex-col justify-center items-center gap-2">
                     <Label className="text-textColor" htmlFor="collateral">TOKEN BORROW</Label>
                     <div className="flex justify-between items-center">
-                    <Input className=" bg-cardBackgroud" type="number" placeholder="1 USDC" />
+                    <Input className=" bg-cardBackgroud m-4" type="number" placeholder="1 USDC" />
                     <Select>
-                    <SelectTrigger className=" w-10 rounded-3xl">
+                    <SelectTrigger className=" w-10 rounded-3xl mr-2 ">
 
 </SelectTrigger>
 <SelectContent>
