@@ -1,7 +1,7 @@
 'use client'
 
 import React, { ReactNode } from 'react'
-import { config,projectId } from '@/app/config'
+import { config,projectId } from '../app/config'
 
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 

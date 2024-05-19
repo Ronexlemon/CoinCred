@@ -1,13 +1,14 @@
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
-import Narvbar from '@/components/Narvbar'
+import Narvbar from '../components/Narvbar'
 
 import { cookieToInitialState } from 'wagmi'
 
 import { config } from './config'
-import Web3ModalProvider from '@/context'
+import Web3ModalProvider from '../context'
 import { Inter } from "next/font/google";
 import "./globals.css";
+import React from 'react'
 
 
 const inter = Inter({ subsets: ["latin"] });
