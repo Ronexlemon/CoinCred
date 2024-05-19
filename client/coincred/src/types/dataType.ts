@@ -3,4 +3,5 @@ export interface LoanRequest {
     TokenAmount: number;
     TokenProfit: number;
     BorrowerAddress: string;
+    duration:number;
 }
