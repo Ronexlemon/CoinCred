@@ -60,7 +60,7 @@ const LoanIssued = () => {
                             <div className="flex flex-col gap-2">
                                 <CardTitle>STATUS</CardTitle>
                                 
-                                <h4>{item.status? <Badge variant="active">In Progress</Badge> : <Badge variant="inactive">PAID</Badge>}</h4>
+                                <h4>{item.status? <Badge variant="active">In PROGRESS</Badge> : <Badge variant="inactive">PAID</Badge>}</h4>
 
                                 </div>
                            
