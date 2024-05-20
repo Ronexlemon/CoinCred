@@ -243,6 +243,9 @@ function getAllLoanRequestIssued()external view returns(RequestLoan[] memory loa
         require((_collateralAmount* getTokenValue(collateral[_collateral])) > (_tokenAmount*getTokenValue(tokens[_token])),"Collateral is less");
         
     }
+     function getCurrentBlockTimeStamp()external view  override  returns(uint256){
+        return block.timestamp;
+    }
     receive() external payable { }
     fallback() external payable { }
 

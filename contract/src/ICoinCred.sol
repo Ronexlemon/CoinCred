@@ -27,6 +27,7 @@ interface ICoinCred {
     function getAllUserLoanRequests(address _user)external view returns(RequestLoan[] memory loans);
     function getAllLenderRequest(address _lender)external view returns(RequestLoan[] memory loans);
     function getAllLoanRequestIssued()external view returns(RequestLoan[] memory loans);
+     function getCurrentBlockTimeStamp()external  view returns(uint256);
 
 
     
