@@ -6,4 +6,5 @@ export interface LoanRequest {
    
     startTime:number;
     endTime:number;
+    status:boolean;
 }
