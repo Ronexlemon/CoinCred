@@ -2,6 +2,20 @@
 pragma solidity ^0.8.24;
 
 contract PriceFeedCollateral {
+    address public owner;
+    int256 public amount;
+    constructor(){
+        owner = msg.sender;
+    }
+    modifier onlyOwner(){
+        require(msg.sender ==owner,"only owner");
+        _;
+    }
+    function setPrice(int256 _amount)public onlyOwner {
+        amount = _amount;
+
+    }
+
     function latestRoundData() public view
     returns (
         uint80 roundId,
@@ -13,6 +27,6 @@ contract PriceFeedCollateral {
         // Add your logic here
         
         // For demonstration, returning default values
-        return (0, 3000, block.timestamp, block.timestamp, 0);
+        return (0, amount, block.timestamp, block.timestamp, 0);
     }
 }
