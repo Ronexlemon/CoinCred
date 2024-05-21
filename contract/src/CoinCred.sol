@@ -2,8 +2,9 @@
 pragma solidity ^0.8.24;
 
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+//import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 // import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV3Interface.sol";
 

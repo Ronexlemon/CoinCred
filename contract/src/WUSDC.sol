@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
+// import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+// import "solmate/tokens/ERC721.sol";
+import {ERC20} from "solmate/tokens/ERC20.sol";
 contract WUSDC is ERC20 {
 
     address public owner;
@@ -16,7 +17,7 @@ contract WUSDC is ERC20 {
         _;
     }
 
-    constructor()ERC20("WUSDC","WUSDC"){
+    constructor()ERC20("WUSDC","WUSDC",18){
         owner = msg.sender;
 
     }
