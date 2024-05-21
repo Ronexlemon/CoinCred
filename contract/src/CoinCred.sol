@@ -10,7 +10,7 @@ import "foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV3Interface.sol
 
 
 import "./ICoinCred.sol";
-contract LendBorrow is ICoinCred{
+contract CoinCred is ICoinCred{ 
     
   //address
   address[] public  allowedTokens;
