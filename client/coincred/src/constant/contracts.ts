@@ -19,6 +19,7 @@ export interface RequestLoan{
     collatrealAmount:bigint,
     
 }
+type HexString = `0x${string}`| undefined;
 
 interface createRequests{
     _tokenRequest:string,
@@ -92,7 +93,7 @@ const getAllRequest =()=>{
         args:[]
     }
 }
-const getAllUserLoanRequests =(userAddress:string)=>{
+const getAllUserLoanRequests =(userAddress:HexString)=>{
     return {abi:CoinCredAbi,
         address:CoinCredContract as `0x${string}`,
         functionName:"getAllUserLoanRequests",
