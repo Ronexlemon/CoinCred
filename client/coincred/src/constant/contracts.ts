@@ -1,7 +1,7 @@
 import ERC20abi from "../constant/ERC20abi.json"
 
 import CoinCredAbi from "../constant/coincredabi.json"
-import { Wusdc,CoinCredContract,LiskSepoliaETH } from "./addresses/address"
+import { Wusdc,CoinCredContract ,LiskSepoliaETH } from "./addresses/address"
 
 
 
@@ -32,14 +32,14 @@ interface createRequests{
 export const UseContractCoincred =()=>{
      const createRequest =({_tokenRequest:tokenAddress,_tokenAmount:tokenAmount,_tokenProfit:tokenProfit,_collateralAddress:collateralAddress}:createRequests)=>{
         return{abi:CoinCredAbi,
-            address:CoinCredContract,
+            address:CoinCredContract as `0x${string}`,
             functionName:"createLoanRequest",
             args:[tokenAddress,tokenAmount,tokenProfit,collateralAddress]
         }
      }
      const approve = (amount:BigInt)=>{
         return{abi:ERC20abi,
-            address:Wusdc,
+            address:Wusdc as `0x${string}`,
             functionName:"approve",
             args:[CoinCredContract,amount]
      }
@@ -48,7 +48,7 @@ export const UseContractCoincred =()=>{
     const lendToken = (loanId:number)=>{
         return {
             abi:CoinCredAbi,
-            address:CoinCredContract,
+            address:CoinCredContract as `0x${string}`,
             functionName:"lendtoken",
             args:[loanId]
         }
@@ -57,7 +57,7 @@ export const UseContractCoincred =()=>{
     const liquidate=(loanId:number)=>{
         return {
             abi:CoinCredAbi,
-            address:CoinCredContract,
+            address:CoinCredContract as `0x${string}`,
             functionName:"liquidate",
             args:[loanId]
         }
@@ -66,7 +66,7 @@ export const UseContractCoincred =()=>{
     const RepayLoan=(loanId:number)=>{
         return {
             abi:CoinCredAbi,
-            address:CoinCredContract,
+            address:CoinCredContract as `0x${string}`,
             functionName:"RepayLoan",
             args:[loanId]
     }}
@@ -74,7 +74,7 @@ export const UseContractCoincred =()=>{
     const cancelLoanRequest=(loanId:number)=>{
         return {
             abi:CoinCredAbi,
-            address:CoinCredContract,
+            address:CoinCredContract as `0x${string}`,
             functionName:"cancelLoanRequest",
             args:[loanId]
         }
@@ -83,14 +83,14 @@ export const UseContractCoincred =()=>{
 
 const getAllRequest =()=>{
     return {abi:CoinCredAbi,
-        address:CoinCredContract,
+        address:CoinCredContract as `0x${string}`,
         functionName:"getAllRequest",
         args:[]
     }
 }
 const getAllUserLoanRequests =(userAddress:string)=>{
     return {abi:CoinCredAbi,
-        address:CoinCredContract,
+        address:CoinCredContract as `0x${string}`,
         functionName:"getAllUserLoanRequests",
         args:[userAddress]
         }
@@ -98,7 +98,7 @@ const getAllUserLoanRequests =(userAddress:string)=>{
 
 const getAllLenderRequest =(lenderAddress:string)=>{
     return {abi:CoinCredAbi,
-        address:CoinCredContract,
+        address:CoinCredContract as `0x${string}`,
         functionName:"getAllLenderRequest",
         args:[lenderAddress]
         }

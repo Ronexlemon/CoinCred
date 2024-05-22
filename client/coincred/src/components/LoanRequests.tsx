@@ -1,6 +1,7 @@
 "use client"
 import React from "react";
 import {useState} from "react"
+import { parseEther } from "viem";
 import { ScrollArea,ScrollBar } from "./ui/scroll-area";
 import {
     Card,
@@ -36,8 +37,9 @@ import { Popover,
     PopoverContent,
     PopoverTrigger, } from "./ui/popover";
     import { Progress } from "./ui/progress"
+    import { useWriteContract } from 'wagmi'
 
-
+import { UseContractCoincred } from "@/constant/contracts";
     
 
 const LoanRequests = () => {
@@ -46,20 +48,30 @@ const LoanRequests = () => {
   const [send,setSend] = useState<boolean>(false);
   const  [toggleprogress,setToggleprogress] = useState<boolean>(false)
   const [progress, setProgress] = useState(13)
+  const { writeContractAsync:approveToken } = useWriteContract()
+  const {approve} =UseContractCoincred();
   const handleApproveTransaction = async () => {
     setApproving(true);
   
     try {
-      // Wait for 10 seconds before setting `approving` to false
-      await new Promise((resolve) =>{
-        for(let i=0; i<100;i++){
-          setTimeout(()=>{
-            setProgress(i)
+      const apptoken = approve(parseEther("1"));
 
-          },1000)
+      const tx = await approveToken({ 
+        abi:apptoken.abi,
+        address: apptoken.address,
+        functionName: apptoken.functionName,
+        args:apptoken.args,
+     })
+      // // Wait for 10 seconds before setting `approving` to false
+      // await new Promise((resolve) =>{
+      //   for(let i=0; i<100;i++){
+      //     setTimeout(()=>{
+      //       setProgress(i)
+
+      //     },1000)
          
-        }
-        setTimeout(resolve, 10000)}); 
+      //   }
+      //   setTimeout(resolve, 10000)}); 
       setApproving(false);
   
       setTransacting(true);
