@@ -1,7 +1,7 @@
 "use client"
 import React from "react";
 import {useState} from "react"
-import { parseEther } from "viem";
+import { parseEther,formatEther } from "viem";
 import { cn } from "@/lib/utils"
 import { ScrollArea,ScrollBar } from "./ui/scroll-area";
 import {
@@ -39,13 +39,15 @@ import { Popover,
     PopoverContent,
     PopoverTrigger, } from "./ui/popover";
     import { Progress } from "./ui/progress"
-    import { useWriteContract } from 'wagmi'
+    import { useWriteContract,useReadContract } from 'wagmi'
+    
 
 import { UseContractCoincred } from "@/constant/contracts";
 import { LiskSepoliaETH,Wusdc } from "@/constant/addresses/address";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { secondsFromNow } from "@/hooks/timeConversion";
+import { RequestLoan } from "@/constant/contracts";
     
 
 const LoanRequests = () => {
@@ -60,9 +62,27 @@ const LoanRequests = () => {
   const [collateralToken, setTokenCollateral] = useState("0")
   const [borrowToken, setTokenBorrow] = useState("0")
   const [date, setDate] = useState<Date>();
+  //write contracts
   const { writeContractAsync:approveToken } = useWriteContract()
   const { writeContractAsync:sendRequest } = useWriteContract()
-  const {approve,createRequest} =UseContractCoincred();
+  const {approve,createRequest,getAllRequest} =UseContractCoincred();
+
+  //read contracts
+  const getAllTheRequests = getAllRequest()
+  const result = useReadContract({
+    abi: getAllTheRequests.abi,
+    address: getAllTheRequests.address,
+    functionName: getAllTheRequests.functionName,
+    args:getAllTheRequests.args
+    
+  })
+  console.log("the result is resulting",result.data)
+  const dataArray:RequestLoan[] = Array.isArray(result.data) ? result.data : [];
+  
+
+  
+  
+  
   const handleApproveTransaction = async () => {
     setApproving(true);
   
@@ -195,7 +215,7 @@ const LoanRequests = () => {
       </div>
       <div className="p-4 gap-4">
        
-        {LoanRequestss.map((item, index) => (
+        {dataArray.map((item, index) => (
                         <Card className="mb-4" key={index}>
                             <div className="flex justify-evenly items-center">
                             <CardHeader>
@@ -203,7 +223,7 @@ const LoanRequests = () => {
                                 <CardDescription>LISK</CardDescription>
                                 <div className="flex flex-col">
                                 <p>Amount</p>
-                                <h4>{item.CollateralAmount}</h4>
+                                <h4>{Number(formatEther(item.collatrealAmount))}</h4>
 
                                 </div>
                             </CardHeader>
@@ -212,7 +232,7 @@ const LoanRequests = () => {
                                 <CardDescription>USDC</CardDescription>
                                 <div className="flex flex-col">
                                 <p>Amount</p>
-                                <h4>{item.TokenAmount}</h4>
+                                <h4>{Number(formatEther(item.tokenAmount))}</h4>
 
                                 </div>
                             </CardHeader>
@@ -221,13 +241,13 @@ const LoanRequests = () => {
                                 <CardDescription>USDC</CardDescription>
                                 <div className="flex flex-col">
                                 <p>Amount</p>
-                                <h4>{item.TokenProfit}</h4>
+                                <h4>{ Number(formatEther(item.tokenProfit))}</h4>
 
                                 </div>
                             </CardHeader>
                             <CardHeader>
                                 <CardTitle>Borrower</CardTitle>
-                                <CardDescription>{item.BorrowerAddress}</CardDescription>
+                                <CardDescription>{item.loanRequester}</CardDescription>
                             </CardHeader>
 
                             </div>

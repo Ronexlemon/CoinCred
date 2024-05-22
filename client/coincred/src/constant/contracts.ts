@@ -5,18 +5,19 @@ import { Wusdc,CoinCredContract ,LiskSepoliaETH } from "./addresses/address"
 
 
 
-interface RequestLoan{
+
+export interface RequestLoan{
     loanRequester:string,
     lender:string,
     tokenRequest:string,
-    tokenAmount:number,
-    tokenProfit:number,
+    tokenAmount:bigint,
+    tokenProfit:bigint,
     loanId:number,
     lendOut:boolean,
     duration:number,
     collateralAddr:string,
-    collatrealAmount:number,
-    value:number,
+    collatrealAmount:bigint,
+    
 }
 
 interface createRequests{
