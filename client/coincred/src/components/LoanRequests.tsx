@@ -2,6 +2,7 @@
 import React from "react";
 import {useState} from "react"
 import { parseEther } from "viem";
+import { cn } from "@/lib/utils"
 import { ScrollArea,ScrollBar } from "./ui/scroll-area";
 import {
     Card,
@@ -11,6 +12,7 @@ import {
     CardHeader,
     CardTitle,
 } from "../components/ui/card";
+import { Calendar } from "./ui/calendar"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -40,6 +42,10 @@ import { Popover,
     import { useWriteContract } from 'wagmi'
 
 import { UseContractCoincred } from "@/constant/contracts";
+import { LiskSepoliaETH,Wusdc } from "@/constant/addresses/address";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { secondsFromNow } from "@/hooks/timeConversion";
     
 
 const LoanRequests = () => {
@@ -48,13 +54,31 @@ const LoanRequests = () => {
   const [send,setSend] = useState<boolean>(false);
   const  [toggleprogress,setToggleprogress] = useState<boolean>(false)
   const [progress, setProgress] = useState(13)
+  const [selectedOption, setSelectedOption] = useState(LiskSepoliaETH)
+  const [selectedOptionToken, setSelectedOptionToken] = useState(Wusdc)
+  const [profitToken, setTokenProfit] = useState("0")
+  const [collateralToken, setTokenCollateral] = useState("0")
+  const [borrowToken, setTokenBorrow] = useState("0")
+  const [date, setDate] = useState<Date>();
   const { writeContractAsync:approveToken } = useWriteContract()
-  const {approve} =UseContractCoincred();
+  const { writeContractAsync:sendRequest } = useWriteContract()
+  const {approve,createRequest} =UseContractCoincred();
   const handleApproveTransaction = async () => {
     setApproving(true);
   
     try {
-      const apptoken = approve(parseEther("1"));
+      const apptoken = approve(parseEther(profitToken));
+     // const requestCreate=  createRequest({_tokenRequest:selectedOptionToken,_tokenAmount:parseEther(borrowToken),_collateralAddress:selectedOption,_tokenProfit:parseEther(profitToken),duration:secondsFromNow(date)})
+      console.log(selectedOption)
+      console.log(selectedOptionToken)
+
+      console.log(borrowToken)
+
+      console.log(collateralToken)
+      console.log(profitToken)
+      console.log(secondsFromNow(date))
+
+
 
       const tx = await approveToken({ 
         abi:apptoken.abi,
@@ -62,31 +86,65 @@ const LoanRequests = () => {
         functionName: apptoken.functionName,
         args:apptoken.args,
      })
-      // // Wait for 10 seconds before setting `approving` to false
-      // await new Promise((resolve) =>{
-      //   for(let i=0; i<100;i++){
-      //     setTimeout(()=>{
-      //       setProgress(i)
 
-      //     },1000)
-         
-      //   }
-      //   setTimeout(resolve, 10000)}); 
+     if(tx){
       setApproving(false);
-  
       setTransacting(true);
-      // Wait for another 10 seconds before setting `transacting` to false
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-      setTransacting(false);
+     
+
+     }
+      
   
-      // Set sending to true after both timeouts
-      setSend(true);
-      // Optionally, you can uncomment this line if you want to close something
-      // setOpen(false);
+      
+    } catch (err) {
+      console.log(err);
+      
+      setApproving(false);
+    }
+  };
+
+  const handleCreateRequest = async () => {
+    
+  
+    try {
+      if (!selectedOption || !selectedOptionToken || !borrowToken || !selectedOption || !profitToken || !date) {
+        console.log("Some required values are missing.");
+        return; // Exit the function if any value is missing
+      }
+      
+      const requestCreate =  createRequest({_tokenRequest:selectedOptionToken,_tokenAmount:parseEther(borrowToken),_collateralAddress:selectedOption,_tokenProfit:parseEther(profitToken),duration:secondsFromNow(date),_value:parseEther(collateralToken)})
+      console.log(selectedOption)
+      console.log(selectedOptionToken)
+
+      console.log(borrowToken)
+
+      console.log(collateralToken)
+      console.log(profitToken)
+      console.log(secondsFromNow(date))
+
+
+
+     
+
+     
+      
+      const tx2 =await sendRequest({
+        abi:requestCreate.abi,
+        address: requestCreate.address,
+        functionName: requestCreate.functionName,
+        args:requestCreate.args,
+        value:requestCreate.value
+      })
+      if(tx2){
+        setTransacting(false)
+      }
+
+     
+      
     } catch (err) {
       console.log(err);
       setTransacting(false);
-      setApproving(false);
+      
     }
   };
     return (
@@ -129,8 +187,8 @@ const LoanRequests = () => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="bg-destructive text-destructive-foreground hover:bg-destructive/90" >Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%" >Confirm</AlertDialogAction>
+          <AlertDialogCancel  onClick={()=>setTransacting(false)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90" >Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleCreateRequest} className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%" >Confirm</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -197,17 +255,20 @@ const LoanRequests = () => {
                     <div className="flex flex-col h-full justify-evenly items-center">
                     <Label className="text-textColor" htmlFor="collateral">COLLATERAL TOKEN</Label>
                     <div className="flex justify-between items-center">
-                    <Input  className=" bg-cardBackgroud m-4"  type="number" placeholder="1 ETH" />
-                    <Select >
+                    <Input  className=" bg-cardBackgroud m-4 text-textColor" onChange={(event) => setTokenCollateral(event.target.value)} type="text" placeholder="1 ETH" />
+                    <Select  value={selectedOption}
+  onValueChange={(value) => {
+    setSelectedOption(value)
+  }}>
 <SelectTrigger className=" w-10  rounded-3xl mr-2 ">
 
 </SelectTrigger>
 <SelectContent>
 <SelectGroup>
 <SelectLabel>Collaterals</SelectLabel>
-<SelectItem value="apple">ETH</SelectItem>
-<SelectItem value="banana">MATIC</SelectItem>
-<SelectItem value="blueberry">CELO</SelectItem>
+<SelectItem value={LiskSepoliaETH}>liskETH</SelectItem>
+<SelectItem value="maticContract">MATIC</SelectItem>
+<SelectItem value="ce">CELO</SelectItem>
 <SelectItem value="grapes">LINK</SelectItem>
 <SelectItem value="pineapple">BNB</SelectItem>
 </SelectGroup>
@@ -218,15 +279,18 @@ const LoanRequests = () => {
                     <div className="flex flex-col justify-center items-center gap-2">
                     <Label className="text-textColor" htmlFor="collateral">TOKEN BORROW</Label>
                     <div className="flex justify-between items-center">
-                    <Input className=" bg-cardBackgroud m-4" type="number" placeholder="1 USDC" />
-                    <Select>
+                    <Input className=" bg-cardBackgroud m-4 text-textColor" onChange={(event) => setTokenBorrow(event.target.value)} type="text" placeholder="1 USDC" />
+                    <Select value={selectedOptionToken}
+  onValueChange={(value) => {
+    setSelectedOptionToken(value)
+  }}>
                     <SelectTrigger className=" w-10 rounded-3xl mr-2 ">
 
 </SelectTrigger>
 <SelectContent>
 <SelectGroup>
 <SelectLabel>Tokens</SelectLabel>
-<SelectItem value="apple">USDC</SelectItem>
+<SelectItem value={selectedOptionToken}>USDC</SelectItem>
 <SelectItem value="banana">USDT</SelectItem>
 <SelectItem value="blueberry">CUSDC</SelectItem>
 <SelectItem value="grapes">DAI</SelectItem>
@@ -242,9 +306,34 @@ const LoanRequests = () => {
 
                     </div>
                     <div className="flex flex-col justify-center items-center gap-2">
+                      <div className="bg-cardBackground w-full">
+                      <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "w-[240px] justify-start text-left text-textColor font-normal bg-cardBackgroud",
+            !date && "text-textColor"
+          )}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {date ? format(date, "PPP") : <span>Pick a date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
+                      </div>
                     <Label className="text-textColor" htmlFor="collateral">TOKEN PROFIT</Label>
                     <div className="flex justify-between items-center">
-                    <Input className=" bg-cardBackgroud" type="number" placeholder="1 USDC" />
+                    <Input onChange={(event) => setTokenProfit(event.target.value)} className="bg-cardBackgroud text-textColor" type="text" placeholder="1 USDC" />
+
                     
                     </div>
 
@@ -254,7 +343,7 @@ const LoanRequests = () => {
                     </div>
 
                     <div className="w-full ">
-                      <Button onClick={handleApproveTransaction} variant="accent" className="w-full">REQUEST</Button>
+                      <Button onClick={()=>setTransacting(true)} variant="accent" className="w-full">REQUEST</Button>
                        
                     </div>
 

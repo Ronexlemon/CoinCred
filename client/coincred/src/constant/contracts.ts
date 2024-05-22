@@ -15,7 +15,8 @@ interface RequestLoan{
     lendOut:boolean,
     duration:number,
     collateralAddr:string,
-    collatrealAmount:number
+    collatrealAmount:number,
+    value:number,
 }
 
 interface createRequests{
@@ -23,18 +24,20 @@ interface createRequests{
     _tokenAmount:BigInt,
     _tokenProfit:BigInt,
     duration:number,
-    _collateralAddress:string
+    _collateralAddress:string,
+    _value:bigint,
 
 }
 
 
 //address _tokenRequest,uint256 _tokenAmount, uint256 _tokenProfit,uint256 duration,address _collateralAddress
 export const UseContractCoincred =()=>{
-     const createRequest =({_tokenRequest:tokenAddress,_tokenAmount:tokenAmount,_tokenProfit:tokenProfit,_collateralAddress:collateralAddress}:createRequests)=>{
+     const createRequest =({_tokenRequest:tokenAddress,_tokenAmount:tokenAmount,_tokenProfit:tokenProfit,_collateralAddress:collateralAddress,duration:duration,_value:value}:createRequests)=>{
         return{abi:CoinCredAbi,
             address:CoinCredContract as `0x${string}`,
             functionName:"createLoanRequest",
-            args:[tokenAddress,tokenAmount,tokenProfit,collateralAddress]
+            args:[tokenAddress,tokenAmount,tokenProfit,duration,collateralAddress],
+            value: value
         }
      }
      const approve = (amount:BigInt)=>{
