@@ -1,4 +1,6 @@
+"use client"
 import React from "react";
+import {useState} from "react"
 import { ScrollArea,ScrollBar } from "./ui/scroll-area";
 import {
     Card,
@@ -8,6 +10,17 @@ import {
     CardHeader,
     CardTitle,
 } from "../components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog"
 import { Input } from "./ui/input";
 import { LoanRequestss } from "@/helpers/data"; 
 import { Button } from "./ui/button";
@@ -25,64 +38,34 @@ import { Popover,
     
 
 const LoanRequests = () => {
+  const [isOpen,setOpen] = useState<boolean>(false);
     return (
         <div className="w-full max-h-screen grid grid-cols-4">
           
             <div className="col-span-3">
                
                 <ScrollArea className="h-3/4 w-full ">
-                {/* <div className="flex w-full h-1/2 justify-center items-center">
-        <h1 className="text-red-800">Yolow</h1>
-      <Popover>
-      <PopoverTrigger asChild  >
-        <Button className="text-red-800" variant="outline">Open popover</Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-80">
-        <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="font-medium leading-none">Dimensions</h4>
-            <p className="text-sm text-muted-foreground">
-              Set the dimensions for the layer.
-            </p>
-          </div>
-          <div className="grid gap-2">
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="width">Width</Label>
-              <Input
-                id="width"
-                defaultValue="100%"
-                className="col-span-2 h-8"
-              />
-            </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="maxWidth">Max. width</Label>
-              <Input
-                id="maxWidth"
-                defaultValue="300px"
-                className="col-span-2 h-8"
-              />
-            </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="height">Height</Label>
-              <Input
-                id="height"
-                defaultValue="25px"
-                className="col-span-2 h-8"
-              />
-            </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="maxHeight">Max. height</Label>
-              <Input
-                id="maxHeight"
-                defaultValue="none"
-                className="col-span-2 h-8"
-              />
-            </div>
-          </div>
-        </div>
-      </PopoverContent>
-    </Popover>
-      </div> */}
+                <div className="flex w-full h-1/2 justify-center items-center">
+        
+        <AlertDialog open={isOpen}>
+      <AlertDialogTrigger asChild >
+        
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction>Continue</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+      </div>
       <div className="p-4 gap-4">
        
         {LoanRequestss.map((item, index) => (
