@@ -35,10 +35,23 @@ import { Select,
 import { Popover,
     PopoverContent,
     PopoverTrigger, } from "./ui/popover";
+
     
 
 const LoanRequests = () => {
   const [isOpen,setOpen] = useState<boolean>(false);
+  const [send,setSend] = useState<boolean>(false);
+  const handleApproveTransaction =async()=>{
+    setOpen(true);
+    try{
+ setSend(true)
+ //setOpen(false)
+
+    }catch(err){
+      console.log(err)
+      setOpen(false)
+    }
+  }
     return (
         <div className="w-full max-h-screen grid grid-cols-4">
           
@@ -60,8 +73,8 @@ const LoanRequests = () => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogCancel className="bg-destructive text-destructive-foreground hover:bg-destructive/90" >Cancel</AlertDialogCancel>
+          <AlertDialogAction className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%" >Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -185,7 +198,8 @@ const LoanRequests = () => {
                     </div>
 
                     <div className="w-full ">
-                        <Button variant="accent" className="w-full">REQUEST</Button>
+                      <Button onClick={handleApproveTransaction} variant="accent" className="w-full">REQUEST</Button>
+                       
                     </div>
 
 
