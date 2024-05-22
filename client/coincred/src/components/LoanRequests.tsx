@@ -35,32 +35,77 @@ import { Select,
 import { Popover,
     PopoverContent,
     PopoverTrigger, } from "./ui/popover";
+    import { Progress } from "./ui/progress"
+
 
     
 
 const LoanRequests = () => {
-  const [isOpen,setOpen] = useState<boolean>(false);
+  const [isTransacting,setTransacting] = useState<boolean>(false);
+  const [isApproving,setApproving] = useState<boolean>(false);
   const [send,setSend] = useState<boolean>(false);
-  const handleApproveTransaction =async()=>{
-    setOpen(true);
-    try{
- setSend(true)
- //setOpen(false)
+  const  [toggleprogress,setToggleprogress] = useState<boolean>(false)
+  const [progress, setProgress] = useState(13)
+  const handleApproveTransaction = async () => {
+    setApproving(true);
+  
+    try {
+      // Wait for 10 seconds before setting `approving` to false
+      await new Promise((resolve) =>{
+        for(let i=0; i<100;i++){
+          setTimeout(()=>{
+            setProgress(i)
 
-    }catch(err){
-      console.log(err)
-      setOpen(false)
+          },1000)
+         
+        }
+        setTimeout(resolve, 10000)}); 
+      setApproving(false);
+  
+      setTransacting(true);
+      // Wait for another 10 seconds before setting `transacting` to false
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+      setTransacting(false);
+  
+      // Set sending to true after both timeouts
+      setSend(true);
+      // Optionally, you can uncomment this line if you want to close something
+      // setOpen(false);
+    } catch (err) {
+      console.log(err);
+      setTransacting(false);
+      setApproving(false);
     }
-  }
+  };
     return (
         <div className="w-full max-h-screen grid grid-cols-4">
           
             <div className="col-span-3">
                
                 <ScrollArea className="h-3/4 w-full ">
-                <div className="flex w-full h-1/2 justify-center items-center">
+                <div className="flex w-full h-full justify-center items-center ">
+                
+                <AlertDialog open={isApproving}>
+      <AlertDialogTrigger asChild >
         
-        <AlertDialog open={isOpen}>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Approving ...</AlertDialogTitle>
+          <AlertDialogDescription>
+          <Progress color="green" value={progress}  />
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        
+      </AlertDialogContent>
+    </AlertDialog>
+
+                </div>
+                <div className="flex w-full h-1/2 justify-center items-center">
+               
+
+        
+        <AlertDialog open={isTransacting}>
       <AlertDialogTrigger asChild >
         
       </AlertDialogTrigger>
@@ -68,13 +113,12 @@ const LoanRequests = () => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            This action cannot be undone. This will permanently Push your transaction onchain.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="bg-destructive text-destructive-foreground hover:bg-destructive/90" >Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%" >Continue</AlertDialogAction>
+          <AlertDialogAction className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%" >Confirm</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
