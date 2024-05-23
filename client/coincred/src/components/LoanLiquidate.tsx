@@ -23,6 +23,9 @@ import { Select,
 import { Popover,
     PopoverContent,
     PopoverTrigger, } from "./ui/popover";
+    import { useWriteContract,useReadContract } from 'wagmi'
+    import { RequestLoan } from "@/constant/contracts";
+    import { UseContractCoincred } from "@/constant/contracts";
     
 
 const LoanLiquidate = () => {
