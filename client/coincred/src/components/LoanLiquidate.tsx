@@ -1,6 +1,6 @@
 
 "use client"
-import React from "react";
+import React, { useState } from "react";
 import { ScrollArea,ScrollBar } from "./ui/scroll-area";
 import {
     Card,
@@ -10,6 +10,18 @@ import {
     CardHeader,
     CardTitle,
 } from "../components/ui/card";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "./ui/alert-dialog"
+  
 import { countdown } from "@/hooks/timeConversion";
 import { parseEther,formatEther } from "viem";
 import { Input } from "./ui/input";
@@ -29,11 +41,17 @@ import { Popover,
     import { useWriteContract,useReadContract } from 'wagmi'
     import { RequestLoan } from "@/constant/contracts";
     import { UseContractCoincred } from "@/constant/contracts";
+import { Progress } from "./ui/progress";
     
 
 const LoanLiquidate = () => {
+     const [isApproving,setApproving] = useState<boolean>(false);
+     const [lendit,setLending] = useState<boolean>(false);
+     //write
+    const { writeContractAsync:liquidateUser } = useWriteContract()
     const { writeContractAsync:approveToken } = useWriteContract()
-    const {approve,createRequest,getAllRequest,lendToken,getCurrentBlockTimeStamp} =UseContractCoincred();
+
+    const {approve,createRequest,getAllRequest,lendToken,getCurrentBlockTimeStamp,liquidate} =UseContractCoincred();
     const getAllTheRequests = getAllRequest()
     const currentBlockTime = getCurrentBlockTimeStamp()
     const result = useReadContract({
@@ -55,6 +73,74 @@ const LoanLiquidate = () => {
       const nowBlockTime: number = Number.isInteger(resulttime.data as number) ? resulttime.data as number : 0;
       console.log("new block",nowBlockTime)
       console.log("run run",Number(resulttime.data))
+
+      
+      const liquidateAndPay = async(loanId:number)=>{
+        const lend = liquidate(loanId)
+        try{
+          const tx = await liquidateUser({ 
+            abi:lend.abi,
+            address: lend.address,
+            functionName: lend.functionName,
+            args:lend.args,
+         })
+    
+         return tx;
+    
+        }catch(err){
+          console.log(err)
+        }
+      }
+
+      const handleApproveTransaction = async (loanId:number,tokenAmount:BigInt) => {
+        setApproving(true);
+      
+        try {
+          const apptoken = approve(tokenAmount);
+         
+          // console.log(selectedOption)
+          // console.log(selectedOptionToken)
+    
+          // console.log(borrowToken)
+    
+          // console.log(collateralToken)
+          // console.log(profitToken)
+          // console.log(secondsFromNow(date))
+    
+    
+    
+          const tx = await approveToken({ 
+            abi:apptoken.abi,
+            address: apptoken.address,
+            functionName: apptoken.functionName,
+            args:apptoken.args,
+         })
+    
+         if(tx){
+          setApproving(false);
+          setLending(true);
+    
+         const txx =  await liquidateAndPay(loanId);
+    
+         if(txx){
+          setLending(false)
+         }else{
+            setLending(false)
+         }
+    
+         
+    
+         }
+          
+      
+          
+        } catch (err) {
+          console.log(err);
+          
+          setApproving(false);
+          setLending(false)
+        }
+      };
     return (
         <div className="w-full max-h-screen ">
             <div className="h-screen w-full grid">
@@ -62,6 +148,42 @@ const LoanLiquidate = () => {
            
                
                 <ScrollArea className="h-3/4 w-full  ">
+                <div className="flex w-full h-full justify-center items-center ">
+                
+                <AlertDialog open={isApproving}>
+      <AlertDialogTrigger asChild >
+        
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Approving ...</AlertDialogTitle>
+          <AlertDialogDescription>
+          <Progress color="green" value={66}  />
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        
+      </AlertDialogContent>
+    </AlertDialog>
+
+                </div>
+                <div className="flex w-full h-full justify-center items-center ">
+                
+                <AlertDialog open={lendit}>
+      <AlertDialogTrigger asChild >
+        
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Liquidating  ...</AlertDialogTitle>
+          <AlertDialogDescription>
+          <Progress color="green" value={88}  />
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        
+      </AlertDialogContent>
+    </AlertDialog>
+
+                </div>
                
       <div className="p-4 gap-4 grid grid-cols-2">
        
@@ -102,7 +224,7 @@ const LoanLiquidate = () => {
                             <div className="flex  justify-end items-center">
                                 
 
-                                <Button variant="accent">LIQUIDATE</Button>
+                                <Button  onClick={()=>handleApproveTransaction(index,(item.tokenAmount + item.tokenProfit))} variant="accent">LIQUIDATE</Button>
 
                             </div>
                                
