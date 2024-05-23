@@ -54,6 +54,7 @@ const LoanRequests = () => {
   const [isTransacting,setTransacting] = useState<boolean>(false);
   const [isApproving,setApproving] = useState<boolean>(false);
   const [send,setSend] = useState<boolean>(false);
+  const [lendit,setLending] = useState<boolean>(false);
   const  [toggleprogress,setToggleprogress] = useState<boolean>(false)
   const [progress, setProgress] = useState(13)
   const [selectedOption, setSelectedOption] = useState(LiskSepoliaETH)
@@ -65,7 +66,8 @@ const LoanRequests = () => {
   //write contracts
   const { writeContractAsync:approveToken } = useWriteContract()
   const { writeContractAsync:sendRequest } = useWriteContract()
-  const {approve,createRequest,getAllRequest} =UseContractCoincred();
+  const { writeContractAsync:lendOutToken } = useWriteContract()
+  const {approve,createRequest,getAllRequest,lendToken} =UseContractCoincred();
 
   //read contracts
   const getAllTheRequests = getAllRequest()
@@ -82,21 +84,37 @@ const LoanRequests = () => {
 
   
   
+  const lendTokens = async(loanId:number)=>{
+    const lend = lendToken(loanId)
+    try{
+      const tx = await lendOutToken({ 
+        abi:lend.abi,
+        address: lend.address,
+        functionName: lend.functionName,
+        args:lend.args,
+     })
+
+     return tx;
+
+    }catch(err){
+      console.log(err)
+    }
+  }
   
-  const handleApproveTransaction = async () => {
+  const handleApproveTransaction = async (loanId:number,tokenAmount:BigInt) => {
     setApproving(true);
   
     try {
-      const apptoken = approve(parseEther(profitToken));
-     // const requestCreate=  createRequest({_tokenRequest:selectedOptionToken,_tokenAmount:parseEther(borrowToken),_collateralAddress:selectedOption,_tokenProfit:parseEther(profitToken),duration:secondsFromNow(date)})
-      console.log(selectedOption)
-      console.log(selectedOptionToken)
+      const apptoken = approve(tokenAmount);
+     
+      // console.log(selectedOption)
+      // console.log(selectedOptionToken)
 
-      console.log(borrowToken)
+      // console.log(borrowToken)
 
-      console.log(collateralToken)
-      console.log(profitToken)
-      console.log(secondsFromNow(date))
+      // console.log(collateralToken)
+      // console.log(profitToken)
+      // console.log(secondsFromNow(date))
 
 
 
@@ -109,7 +127,14 @@ const LoanRequests = () => {
 
      if(tx){
       setApproving(false);
-      setTransacting(true);
+      setLending(true);
+
+     const txx =  await lendTokens(loanId);
+
+     if(txx){
+      setLending(false)
+     }
+
      
 
      }
@@ -191,6 +216,24 @@ const LoanRequests = () => {
     </AlertDialog>
 
                 </div>
+                <div className="flex w-full h-full justify-center items-center ">
+                
+                <AlertDialog open={lendit}>
+      <AlertDialogTrigger asChild >
+        
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Lending Out ...</AlertDialogTitle>
+          <AlertDialogDescription>
+          <Progress color="green" value={progress}  />
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        
+      </AlertDialogContent>
+    </AlertDialog>
+
+                </div>
                 <div className="flex w-full h-1/2 justify-center items-center">
                
 
@@ -213,6 +256,7 @@ const LoanRequests = () => {
       </AlertDialogContent>
     </AlertDialog>
       </div>
+     
       <div className="p-4 gap-4">
        
         {dataArray.map((item, index) => (
@@ -254,9 +298,9 @@ const LoanRequests = () => {
 
                             <CardContent>
                             <div className="flex  justify-end items-center">
-                                
+                                {item.lendOut? <Button disabled={true} onClick={()=>handleApproveTransaction(index,item.tokenAmount)} variant="destructive">LENDED</Button>: <Button onClick={()=>handleApproveTransaction(index,item.tokenAmount)} variant="accent">LEND</Button>}
 
-                                <Button variant="accent">LEND</Button>
+                                
 
                             </div>
                                
