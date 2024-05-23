@@ -59,6 +59,8 @@ export const UseContractCoincred =()=>{
         }
     }
 
+    
+
     const liquidate=(loanId:number)=>{
         return {
             abi:CoinCredAbi,
@@ -112,7 +114,7 @@ const getAllLenderRequest =(lenderAddress:string)=>{
 
 const getCurrentBlockTimeStamp =()=>{
     return{abi:CoinCredAbi,
-        address:CoinCredContract,
+        address:CoinCredContract as `0x${string}`,
         functionName:"getCurrentBlockTimeStamp",
         args:[]
         

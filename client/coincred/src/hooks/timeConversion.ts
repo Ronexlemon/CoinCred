@@ -27,7 +27,8 @@ export function convertSecondsToDaysHours(seconds: number): { days: number, hour
 export function countdown(startTime: number, endTime: number): string {
     const now = Math.floor(Date.now() / 1000); // current time in seconds
   
-    const remainingTime = endTime - startTime;
+    const remainingTime = startTime - endTime;
+    
 
     if (remainingTime <= 0) {
         return "Time is up!";
