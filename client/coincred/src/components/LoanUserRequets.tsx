@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React, { useState } from "react";
 import { ScrollArea,ScrollBar } from "./ui/scroll-area";
 import { parseEther,formatEther } from "viem";
 import {
@@ -10,6 +10,17 @@ import {
     CardHeader,
     CardTitle,
 } from "../components/ui/card";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "./ui/alert-dialog"
 import { Badge } from "./ui/badge";
 import { countdown } from "@/hooks/timeConversion";
 import { Input } from "./ui/input";
@@ -27,13 +38,42 @@ import { Popover,
     PopoverContent,
     PopoverTrigger, } from "./ui/popover";
 import { RequestLoan, UseContractCoincred } from "@/constant/contracts";
-import { useReadContract } from "wagmi";
+import { useReadContract, useWriteContract } from "wagmi";
 import { useAccount } from "wagmi";
+import { Progress } from "./ui/progress"
     
 
 const LoanUserRequests = () => {
     const account = useAccount()
-    const {approve,createRequest,getAllRequest,getAllUserLoanRequests} =UseContractCoincred();
+    const [isApproving,setApproving] = useState<boolean>(false);
+    const {approve,createRequest,getAllRequest,getAllUserLoanRequests,RepayLoan} =UseContractCoincred();
+
+    //write
+    const { writeContractAsync:repayloan } = useWriteContract()
+
+    const handleRepay =async(loanId:number)=>{
+       
+            setApproving(true)
+
+        try{
+            const repay = RepayLoan(loanId);
+            const tx = await repayloan({ 
+                abi:repay.abi,
+                address: repay.address,
+                functionName: repay.functionName,
+                args:repay.args,
+             })
+             if(tx){
+                setApproving(false)
+             }else{
+                setApproving(false)
+             }
+
+        }catch(err){
+            console.log(err)
+            setApproving(false)
+        }
+    }
 
   //read contracts
   const getAllTheRequests = getAllUserLoanRequests(account.address)
@@ -53,6 +93,24 @@ const LoanUserRequests = () => {
            
                
                 <ScrollArea className="h-3/4 w-full  ">
+                <div className="flex w-full h-full justify-center items-center ">
+                
+                <AlertDialog open={isApproving}>
+      <AlertDialogTrigger asChild >
+        
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Paying ...</AlertDialogTitle>
+          <AlertDialogDescription>
+          <Progress color="green" value={95}  />
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        
+      </AlertDialogContent>
+    </AlertDialog>
+
+                </div>
                
       <div className="p-4 gap-4 grid grid-cols-2">
        
@@ -91,7 +149,7 @@ const LoanUserRequests = () => {
                             <div className="flex  justify-end items-center">
                                 
 
-                                <Button variant="accent">PAY</Button>
+                                <Button onClick={()=>handleRepay(index)}  variant="accent">PAY</Button>
 
                             </div>
                                
