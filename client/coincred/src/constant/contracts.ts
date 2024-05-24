@@ -103,7 +103,7 @@ const getAllUserLoanRequests =(userAddress:HexString)=>{
         }
 }
 
-const getAllLenderRequest =(lenderAddress:string)=>{
+const getAllLenderRequest =(lenderAddress:HexString)=>{
     return {abi:CoinCredAbi,
         address:CoinCredContract as `0x${string}`,
         functionName:"getAllLenderRequest",
