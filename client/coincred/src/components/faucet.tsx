@@ -46,66 +46,26 @@ import { formatEther } from "viem";
 const Faucet = () => {
     const account = useAccount()
     const [isApproving,setApproving] = useState<boolean>(false);
+    const [userAddress, setUserAddress] = useState<`0x${string}`>()
    
     const [lendit,setLending] = useState<boolean>(false);
-    const {approve,createRequest,getAllRequest,getCurrentBlockTimeStamp,getAllUserLoanRequests,RepayLoan,getAllLenderRequest,liquidate} =UseContractCoincred();
-    const currentBlockTime = getCurrentBlockTimeStamp()
-    const { writeContractAsync:liquidateUser } = useWriteContract()
+    const {approve,createRequest,getAllRequest,getCurrentBlockTimeStamp,getAllUserLoanRequests,RepayLoan,getAllLenderRequest,liquidate,mint} =UseContractCoincred();
+   
     const { writeContractAsync:approveToken } = useWriteContract()
-    const resulttime = useReadContract({
-        abi: currentBlockTime.abi,
-        address:currentBlockTime.address,
-        functionName: currentBlockTime.functionName,
-        args:currentBlockTime.args
-        
-      })
-      
-      const nowBlockTime: number = Number.isInteger(resulttime.data as number) ? resulttime.data as number : 0;
-
-    //read contracts
-  const getAllTheRequests = getAllLenderRequest(account.address)
-  const result = useReadContract({
-    abi: getAllTheRequests.abi,
-    address: getAllTheRequests.address,
-    functionName: getAllTheRequests.functionName,
-    args:getAllTheRequests.args
     
-  })
-  console.log("the result is resulting",result.data)
-  const dataArray:RequestLoan[] = Array.isArray(result.data) ? result.data : [];
+
+    
 
 
-  const liquidateAndPay = async(loanId:number)=>{
-    const lend = liquidate(loanId)
-    try{
-      const tx = await liquidateUser({ 
-        abi:lend.abi,
-        address: lend.address,
-        functionName: lend.functionName,
-        args:lend.args,
-     })
+  
 
-     return tx;
-
-    }catch(err){
-      console.log(err)
-    }
-  }
-
-  const handleApproveTransaction = async (loanId:number,tokenAmount:BigInt) => {
+  const handleApproveTransaction = async () => {
     setApproving(true);
   
     try {
-      const apptoken = approve(tokenAmount);
+      const apptoken = mint(userAddress);
      
-      // console.log(selectedOption)
-      // console.log(selectedOptionToken)
-
-      // console.log(borrowToken)
-
-      // console.log(collateralToken)
-      // console.log(profitToken)
-      // console.log(secondsFromNow(date))
+      
 
 
 
@@ -118,19 +78,12 @@ const Faucet = () => {
 
      if(tx){
       setApproving(false);
-      setLending(true);
-
-     const txx =  await liquidateAndPay(loanId);
-
-     if(txx){
-      setLending(false)
-     }else{
-        setLending(false)
-     }
+     
+      }
 
      
 
-     }
+     
       
   
       
@@ -138,7 +91,7 @@ const Faucet = () => {
       console.log(err);
       
       setApproving(false);
-      setLending(false)
+      
     }
   };
     return (
@@ -147,7 +100,7 @@ const Faucet = () => {
           
            
                
-                <ScrollArea className="h-3/4 w-full  ">
+                <ScrollArea className="h-full w-full  ">
                 <div className="flex w-full h-full justify-center items-center ">
                 
                 <AlertDialog open={isApproving}>
@@ -156,9 +109,9 @@ const Faucet = () => {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Approving ...</AlertDialogTitle>
+          <AlertDialogTitle>Minting ...</AlertDialogTitle>
           <AlertDialogDescription>
-          <Progress color="green" value={66}  />
+          <Progress color="green" value={77}  />
           </AlertDialogDescription>
         </AlertDialogHeader>
         
@@ -184,14 +137,14 @@ const Faucet = () => {
 
                 </div>
                
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center h-full w-full items-center">
        
         
-                        <Card className="mb-4" >
+                        <Card className="mb-4 w-1/2 h-1/2 flex flex-col justify-between" >
                             <div className="flex justify-evenly items-center">
                             <CardHeader>
                             <div className="flex flex-col gap-1">
-                                <CardTitle className="text-sm">PERIOD ENDS IN</CardTitle>
+                                <CardTitle className="text-sm">GET WUSDC TESTNET</CardTitle>
                                
                                 
                                 
@@ -201,40 +154,29 @@ const Faucet = () => {
                                 </div>
                                
                                 <div className="flex flex-col gap-1">
-                                <CardTitle className="text-sm">Token to Lend</CardTitle>
+                                <CardTitle className="text-sm">Receive Address</CardTitle>
                                 
                                
 
                                 </div>
-                                <div className="flex flex-col gap-1">
-                                <CardTitle className="text-sm">Token Profit</CardTitle>
+                                
+                                <CardTitle className="text-sm w-full"> <Input className=" w-full bg-cardBackgroud m-4 text-textColor" onChange={(event) => setUserAddress(event.target.value as `0x${string}`)} type="text" placeholder="0x656368742752...5376738" /></CardTitle>
                                 
                              
 
-                                </div>
-                                <div className="flex flex-col gap-1">
-                                <CardTitle className="text-sm">Token to Acquire incase of default</CardTitle>
                                
-                                
-                                
-
-                                </div>
+                               
                             </CardHeader>
 
-                            <div className="flex flex-col gap-1">
-                                <CardTitle className="text-sm">STATUS</CardTitle>
-                                
-                                <h4> <Badge variant="active">In PROGRESS</Badge> </h4>
-
-                                </div>
+                           
                            
 
                             </div>
 
                             <CardContent>
                             <div className="flex  justify-end items-center">
-                             <Button   variant="accent">CLAIM</Button> 
-                              <Button disabled={true} variant="destructive">CLAIMED</Button>
+                            
+                              <Button  onClick={()=> handleApproveTransaction()} variant="destructive">Faucet</Button>
                                 
 
                                 

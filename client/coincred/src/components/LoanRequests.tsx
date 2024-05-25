@@ -145,6 +145,7 @@ const LoanRequests = () => {
       console.log(err);
       
       setApproving(false);
+      setLending(false)
     }
   };
 
@@ -226,7 +227,7 @@ const LoanRequests = () => {
         <AlertDialogHeader>
           <AlertDialogTitle>Lending Out ...</AlertDialogTitle>
           <AlertDialogDescription>
-          <Progress color="green" value={progress}  />
+          <Progress color="green" value={88}  />
           </AlertDialogDescription>
         </AlertDialogHeader>
         

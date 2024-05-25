@@ -49,6 +49,13 @@ export const UseContractCoincred =()=>{
             args:[CoinCredContract,amount]
      }
     }
+    const mint = (address:HexString)=>{
+        return{abi:ERC20abi,
+            address:Wusdc as `0x${string}`,
+            functionName:"mint",
+            args:[address]
+     }
+    }
 
     const lendToken = (loanId:number)=>{
         return {
@@ -137,7 +144,8 @@ const getAllLoanRequestIssued =()=>{
         RepayLoan,lendToken
         ,getAllUserLoanRequests,
         getCurrentBlockTimeStamp,
-        liquidate}
+        liquidate,
+    mint}
      
 
 
