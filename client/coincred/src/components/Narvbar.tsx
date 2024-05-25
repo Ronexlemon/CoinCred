@@ -29,6 +29,7 @@ const Narvbar =()=>{
 <Button onClick={()=> router.replace("/liquidate")} className="flex gap-2 justify-between items-center" variant="default"><GiLiquidSoap /> Liquidate</Button>
 <Button onClick={()=> router.replace("/requests")} className="flex gap-2 justify-between items-center" variant="default"><BsBank/> Requests</Button>
 <Button onClick={()=> router.replace("/loanissue")} className="flex gap-2 justify-between items-center" variant="default"><GiTakeMyMoney/> Loans Issued</Button>
+<Button onClick={()=> router.replace("/faucet")} className="flex gap-2 justify-between items-center" variant="default"><GiTakeMyMoney/> Faucet</Button>
 
 
 
