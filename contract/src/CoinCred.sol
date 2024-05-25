@@ -11,7 +11,7 @@ import "foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV3Interface.sol
 
 
 import "./ICoinCred.sol";
-contract CoinCred is ICoinCred{ 
+contract CoinCredd is ICoinCred{ 
     
   //address
   address[] public  allowedTokens;
@@ -193,7 +193,7 @@ function createLoanRequest(address _tokenRequest,uint256 _tokenAmount, uint256 _
    function getAllLenderRequest(address _lender)external view returns(RequestLoan[] memory loans){
         uint256 count=0;
         for (uint256 i=0; i < numOfRequestLoans; i++){
-            if(requestloan[i].loanRequester == _lender){
+            if(requestloan[i].lender == _lender){
                 count ++;
             }
                    }

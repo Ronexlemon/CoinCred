@@ -6,7 +6,7 @@ import "./ICoinCred.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 
-contract CoinCred is ICoinCred{ 
+contract CoinCredd is ICoinCred{ 
     
   //address
   address[] public  allowedTokens;
