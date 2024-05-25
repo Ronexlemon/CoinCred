@@ -85,7 +85,7 @@ const LoanLiquidate = () => {
             args:lend.args,
          })
     
-         return tx;
+         return true;
     
         }catch(err){
           console.log(err)
